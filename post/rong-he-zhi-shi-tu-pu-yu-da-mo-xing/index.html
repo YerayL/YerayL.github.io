@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>大模型和知识图谱结合 | Lan&#39;s Blog</title>
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1696140031863">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="大模型和知识图谱结合 | Lan&#39;s Blog - Atom Feed" href="https://yerayl.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="大语言模型涌现出了通用的能力，但是存在的主要问题：1. 缺乏事实知识，训练中看了很多事实和知识，但是却经常不能正确回想起来，而且存在幻觉。2. 缺乏可解释性，概率模型推理indecisive，现在应用思维链能提供一部分可解释性，但是同样存在..." />
+    <meta name="keywords" content="知识图谱,大语言模型" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://yerayl.github.io/">
+  <img class="avatar" src="https://yerayl.github.io//images/avatar.png?v=1696140031863" alt="">
+  </a>
+  <h1 class="site-title">
+    Lan&#39;s Blog
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              大模型和知识图谱结合
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-08-22
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="post-tag">
+                  # 知识图谱
+                </a>
+              
+                <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="post-tag">
+                  # 大语言模型
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://yerayl.github.io//post-images/rong-he-zhi-shi-tu-pu-yu-da-mo-xing.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>大语言模型涌现出了通用的能力，但是存在的主要问题：1. <strong>缺乏事实知识</strong>，训练中看了很多事实和知识，但是却经常不能正确回想起来，而且存在幻觉。2. <strong>缺乏可解释性</strong>，概率模型推理<strong>indecisive</strong>，现在应用思维链能提供一部分可解释性，但是同样存在幻觉的问题，使其<strong>难以应用在高风险场景</strong>，例如医疗诊断和法律判决。</p>
+<p>知识图谱是一个解决这些问题的思路。知识图谱包含大量三元组，是<strong>结构化且decisive</strong>的知识表示方式。它能提供<strong>符号推理</strong>能力，具有<strong>可解释性</strong>。领域专家可以构建提供精确可靠的特定领域知识图谱。但是存在的主要问题：1. 构建困难，难以处理其<strong>不完整</strong>和<strong>动态改变</strong>的特点。2. 很多方法<strong>忽视知识图谱中的丰富文本信息</strong>。3. 很多方法只适用特定知识图谱，<strong>通用性不够</strong>。下图分别总结了大模型和知识图谱的优缺点：</p>
+<figure data-type="image" tabindex="1"><img src="https://yerayl.github.io//post-images/1692710974596.png" alt="大模型和知识图谱的优缺点" title="大模型和知识图谱的优缺点" loading="lazy"></figure>
+<p>融合大模型和知识图谱的方法主要可以分为三类：1. <strong>KG-enhanced LLMs</strong>，在预训练时加入知识图谱，帮助大模型学习知识，或者在推理时使用大模型检索知识以及对推理提供分析和解释。2. <strong>LLM-augmented KGs</strong>，最直接的方式是用大模型处理知识图谱中的语料，增强知识图谱表示。也有研究大模型去做实体和关系抽取，来完成图谱构建。还有通过将知识图谱转化为提示，输入给大模型直接做知识推理任务。3. <strong>Synergized LLM + KG</strong>, 在知识表示和推理中相互增强，下图是一个协同大模型和知识图谱的通用框架，主要可以是包含数据层，协同模型，技术以及应用四个层面。</p>
+<figure data-type="image" tabindex="2"><img src="https://yerayl.github.io//post-images/1692712105069.png" alt="协同大模型和知识图谱的通用框架" title="协同大模型和知识图谱的通用框架" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://yerayl.github.io//post-images/1692712734574.png" alt="融合大模型和知识图谱研究的细粒度分类图.png" title="融合大模型和知识图谱研究和细粒度分类图.png" loading="lazy"></figure>
+<p><strong>未来研究方向</strong>：1. 用知识图谱检测大模型幻觉，实现一个更加通用的跨领域的事实核查模型。2. 用知识图谱进行知识编辑，现在的工作还只能编辑简单的基于三元组的知识，并且存在灾难性遗忘和错误编辑的问题。3. 用知识图谱对黑盒大模型进行知识注入，对于闭源的大模型，现在将知识转换为提示输入的方法的问题是不能泛化到新的大模型，还有受限于输入长度。 4. 使用多模态大模型与知识图谱进行对齐。5. 协同大模型和知识图谱双向推理，可以结合很多方法例如多模态学习、图神经网络、持续学习，知识图谱的搜索和文本驱动的推理互相验证。</p>
+<p>[1]<a href="https://arxiv.org/pdf/2306.08302.pdf">Unifying Large Language Models and Knowledge Graphs: A Roadmap</a><br>
+[2]<a href="https://arxiv.org/pdf/2308.06374.pdf">Large Language Models and Knowledge Graphs: Opportunities and Challenges</a></p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://yerayl.github.io/post/vLLM-blog/">
+              <h3 class="post-title">
+                vLLM框架原理——PagedAttention
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://yerayl.github.io/" target="_blank"> Hi</a>
+  <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

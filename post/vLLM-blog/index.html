@@ -1,0 +1,216 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>vLLM框架原理——PagedAttention | Lan&#39;s Blog</title>
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1696140031863">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="vLLM框架原理——PagedAttention | Lan&#39;s Blog - Atom Feed" href="https://yerayl.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="简介
+vLLM是一个开源的大模型推理加速框架，通过PagedAttention高效地管理attention中缓存的张量，实现了比HuggingFace Transformers高24倍的吞吐量。
+PagedAttention
+作者发现大模型..." />
+    <meta name="keywords" content="大语言模型" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://yerayl.github.io/">
+  <img class="avatar" src="https://yerayl.github.io//images/avatar.png?v=1696140031863" alt="">
+  </a>
+  <h1 class="site-title">
+    Lan&#39;s Blog
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              vLLM框架原理——PagedAttention
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-08-11
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="post-tag">
+                  # 大语言模型
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://raw.githubusercontent.com/vllm-project/vllm/main/docs/source/assets/logos/vllm-logo-text-light.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h2 id="简介">简介</h2>
+<p>vLLM是一个开源的大模型推理加速框架，通过PagedAttention高效地管理attention中缓存的张量，实现了比HuggingFace Transformers高24倍的吞吐量。</p>
+<h2 id="pagedattention">PagedAttention</h2>
+<p>作者发现大模型推理的性能瓶颈主要来自于内存。一是自回归过程中缓存的K和V张量非常大，在LLaMA-13B中，单个序列输入进来需要占用1.7GB内存。二是内存占用是动态的，取决于输入序列的长度。由于碎片化和过度预留，现有的系统浪费了60%-80%的内存。</p>
+<p>PagedAttention灵感来自于操作系统中<strong>虚拟内存</strong>和<strong>分页</strong>的经典思想，它可以允许在非连续空间立存储连续的KV张量。具体来说，<strong>PagedAttention把每个序列的KV缓存进行了分块，每个块包含固定长度的token</strong>，而在计算attention时可以高效地找到并获取那些块。</p>
+<figure data-type="image" tabindex="1"><img src="https://vllm.ai/assets/figures/annimation0.gif" alt="KV缓存分片的过程" title="KV缓存分片的过程" loading="lazy"></figure>
+<p>每个固定长度的块可以看成虚拟内存中的页，token可以看成字节，序列可以看成进程。那么通过一个块表就可以将连续的逻辑块映射到非连续的物理块，而物理块可以根据新生成的token按需分配。</p>
+<figure data-type="image" tabindex="2"><img src="https://vllm.ai/assets/figures/annimation1.gif" alt="通过PagedAttention生成序列的过程" title="通过PagedAttention生成的过程" loading="lazy"></figure>
+<p>所以序列在分块之后，只有最后一个块可能会浪费内存（实际中浪费的内存低于4%）。高效利用内存的好处很明显：系统可以在一个batch中同时输入更多的序列，提升GPU的利用率，显著地提升吞吐量。</p>
+<p>PagedAttention的另外一个好处是<strong>高效内存共享</strong>。例如，在并行采样的时候，一个prompt需要生成多个输出序列。这种情况下，对于这个prompt的计算和内存可以在输出序列之间共享。</p>
+<figure data-type="image" tabindex="3"><img src="https://vllm.ai/assets/figures/annimation2.gif" alt="并行采样的例子" title="并行采样的例子" loading="lazy"></figure>
+<p>通过块表可以自然地实现内存共享。类似进程之间共享物理页，在PagedAttention中的不同序列通过将逻辑块映射到一样的物理块上可以实现共享块。为了确保安全共享，PagedAttention跟踪物理块的引用计数，并实现了<strong>Copy-on-Write</strong>机制。<br>
+<img src="https://vllm.ai/assets/figures/annimation3.gif" alt="同一个输入采样生成多个输出的例子" title="同一个输入采样生成多个输出的例子" loading="lazy"></p>
+<p>内存共享减少了55%内存使用量，大大降低了采样算法的内存开销，同时提升了高达2.2倍的吞吐量。</p>
+<p><a href="https://lmsys.org/">LMSYS</a>早期使用基于Huggingface Transformers的服务后端代码：https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/model_worker.py</p>
+<p>使用vLLM部署的代码（FastChat-vLLM：FastChat作为模型聊天服务前端，vLLM作为推理后端）：https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/vllm_worker.py</p>
+<p>吞吐量测试的代码：https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/test_throughput.py</p>
+<p>早期的测试结果显示vLLM提升了30倍以上的吞吐量。vLLM的使用也大大降低了运营成本，LMSYS使用vLLM减少了50%gpu数量。同时每天可以平均处理30K请求，峰值为60K，证明了vLLM的鲁棒性。</p>
+<h2 id="快速使用"><a href="https://vllm.readthedocs.io/en/latest/getting_started/quickstart.html">快速使用</a></h2>
+<p>安装vLLM：</p>
+<pre><code class="language-shell">$ pip install vllm
+</code></pre>
+<p>导入vLLM并在Python脚本中使用LLM类：</p>
+<pre><code class="language-python">from vllm import LLM
+
+prompts = [&quot;Hello, my name is&quot;, &quot;The capital of France is&quot;]  # Sample prompts.
+llm = LLM(model=&quot;lmsys/vicuna-7b-v1.3&quot;)  # Create an LLM.
+outputs = llm.generate(prompts)  # Generate texts from the prompts.
+</code></pre>
+<p>要使用vLLM进行在线服务，可以通过以下方式启动与OpenAI api兼容的服务:</p>
+<pre><code class="language-shell">$ python -m vllm.entrypoints.openai.api_server --model lmsys/vicuna-7b-v1.3
+</code></pre>
+<p>可以使用与OpenAI API相同的格式查询服务器:</p>
+<pre><code class="language-shell">$ curl http://localhost:8000/v1/completions \
+    -H &quot;Content-Type: application/json&quot; \
+    -d '{
+        &quot;model&quot;: &quot;lmsys/vicuna-7b-v1.3&quot;,
+        &quot;prompt&quot;: &quot;San Francisco is a&quot;,
+        &quot;max_tokens&quot;: 7,
+        &quot;temperature&quot;: 0
+    }'
+</code></pre>
+<p>[1] <a href="https://vllm.ai/">vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention</a></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E7%AE%80%E4%BB%8B">简介</a></li>
+<li><a href="#pagedattention">PagedAttention</a></li>
+<li><a href="#%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8">快速使用</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://yerayl.github.io/" target="_blank"> Hi</a>
+  <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
