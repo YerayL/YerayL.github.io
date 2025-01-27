@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1737965003220">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</h1>
+            <p class="article-meta">
+              2024-12-24
+              
+                <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge secondary">
+                  脑网络
+                </a>
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h2 id="一-总结">一、总结</h2>
+<h3 id="1-这篇论文要解决什么问题">1.  这篇论文要解决什么问题？</h3>
+<p>作者总结了两个脑网络分析中带来噪声的问题。<strong>子人群分布变化</strong>：分析神经疾病应该捕捉在所有人群中不变的疾病特性，然而，某些特征对于子种群（不能推广到整个种群），并且与疾病无关，会构成特定子人群的噪声。<strong>忽视节点身份</strong>：一般GNN不考虑节点身份，针对脑网络的已有工作也考虑节点身份了，但是它们不考虑子人群分布变化。</p>
+<h3 id="2-已有工作的思路以及不足之处有哪些">2. 已有工作的思路以及不足之处有哪些？</h3>
+<p>已有工作主要是基于GNN和Graph Transformer。不足之处即没考虑上述两个问题，同时，先前研究还发现一个GNN的问题是过度平滑。在本文背景下，基于相关性的脑网络图天然具有高密度（全连接图），很容易受到过度平滑的影响。</p>
+<h3 id="3-作者的洞见insight有哪些">3. 作者的洞见（insight）有哪些？</h3>
+<p>看起来是结合他先前的工作ContrastPool（架构做了些微调，GNN换graph transformer，簇的熵换成对比损失）和CARE（Cluster Loss，解决子人群分布变化）。</p>
+<h3 id="4-解决方法的基本思想是什么">4. 解决方法的基本思想是什么？</h3>
+<p>同时考虑不同group的graph级信息、节点身份。</p>
+<h2 id="二-方法">二、方法</h2>
+<p>不同group之间的脑网络通过ROI-wise注意力和subject-wise注意力聚合生成对比图，对比图将为测试提供先验知识。每个节点结合一个可学习的Identity Embedding，代替拓扑结构的位置信息。簇损失强制属于同一group的受试者获得相似的表示，而来自不同组的表示相异。对比损失将属于同一ROI的节点视为正对，所有其他节点对都被视为负对。</p>
+<h2 id="三-实验">三、实验</h2>
+<p>预处理的ADNI脑网络数据集目前还未公开。第一次接触ADNI数据库，遇到的问题是不理解筛选条件的含义，同一受试者下多个MRI的区别，不知道该下载哪些作为原始数据，目前看到的脑网络相关论文都没有讲这些细节。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">
+                <h3 class="post-title">
+                  [ICML 2024] Learning High-Order Relationships of Brain Regions
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1737965003220" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/ru-he-yue-du-lun-wen/">如何阅读论文</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/lun-wen-yue-du-iclr-2024-workshop-re-align-realnet-achieving-more-human-brain-like-vision-via-human-neural-representational-alignment/">论文阅读：[ICLR 2024 Workshop Re-Align] ReAlnet: Achieving More Human Brain-Like Vision via Human Neural Representational Alignment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/biao-shi-xiang-si-xing-jie-ma-representational-similarity-analysis-rsa/">多变量模式分析中的基于分类的解码和表征相似性分析</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/lun-wen-yue-du-coling-2024-prefix-diffusion-a-lightweight-diffusion-model-for-diverse-image-captioning/">论文阅读：[COLING 2024] Prefix-diffusion: A Lightweight Diffusion Model for Diverse Image Captioning</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/latex/">LaTeX  Mathematical Symbols</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge success">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge secondary">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge warning">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge secondary">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge ">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge ">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge warning">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge secondary">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge secondary">
+          知识图谱
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
