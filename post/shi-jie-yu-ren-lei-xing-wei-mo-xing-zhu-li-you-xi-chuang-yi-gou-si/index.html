@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>世界与人类行为模型助力游戏创意构思 | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1745483680487">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>世界与人类行为模型助力游戏创意构思</h1>
+            <p class="article-meta">
+              2025-03-06
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="nature-2025-world-and-human-action-models-towards-gameplay-ideation"><a href="https://www.nature.com/articles/s41586-025-08600-3">[Nature 2025] World and Human Action Models towards gameplay ideation</a></h1>
+<h1 id="一-总结">一、总结</h1>
+<ol>
+<li><strong>任务介绍</strong>:
+<ul>
+<li>本文介绍了一个名为 World and Human Action Model (WHAM) 的生成模型，旨在通过<strong>生成一致且多样化的游戏玩法序列来支持游戏开发中的创意构思</strong>。该模型通过<strong>学习人类游戏数据来预测游戏视觉和玩家的控制器动作，从而生成符合游戏物理和机制的连贯游戏场景</strong>。</li>
+</ul>
+</li>
+<li><strong>解决什么问题</strong>:
+<ul>
+<li>现有的生成式 AI 模型在支持创意实践方面存在局限性，尤其是在游戏开发中，这些模型往往无法充分支持发散性思维和迭代实践。WHAM 旨在解决这些问题，通过生成一致、多样且能够持久化用户修改的游戏玩法序列，来更好地支持创意构思。</li>
+</ul>
+</li>
+<li><strong>最朴素的做法</strong>:
+<ul>
+<li>传统的做法是手动定义或提取特定领域的结构，以支持创意工具的开发。这种方法通常需要大量的手动工作，并且难以扩展到更广泛的应用场景。</li>
+</ul>
+</li>
+<li><strong>本文的做法</strong>:
+<ul>
+<li>本文提出了 WHAM 模型，该模型基于 Transformer 架构，通过学习人类游戏数据来生成游戏视觉和控制器动作。WHAM 能够生成一致且多样化的游戏玩法序列，并能够持久化用户修改。这种方法不需要手动定义结构，而是从数据中自动学习相关结构，从而支持更广泛的应用。</li>
+</ul>
+</li>
+<li><strong>发现（Findings）和洞察（Insights）</strong>:
+<ul>
+<li><strong>发现</strong>:
+<ul>
+<li>WHAM 能够生成与人类游戏玩法高度一致的序列，这通过 Fréchet Video Distance (FVD) 评估得到验证。</li>
+<li>WHAM 生成的游戏玩法序列在行为和视觉上具有多样性，这通过 Wasserstein 距离评估得到验证。</li>
+<li>WHAM 能够在一定程度上持久化用户修改的游戏元素，例如插入的游戏对象、角色和地图元素。</li>
+</ul>
+</li>
+<li><strong>洞察</strong>:
+<ul>
+<li>生成式 AI 模型可以通过学习复杂数据结构来支持创意实践，而不需要手动定义这些结构。</li>
+<li>一致性和多样性是支持创意构思的关键能力，而持久化用户修改则进一步增强了模型的实用性。</li>
+<li>通过适当的模型架构和训练数据，生成式 AI 模型可以生成符合游戏物理和机制的连贯游戏场景。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>有没有更好的解决方法？有没有其他需要解决的问题？能不能扩展到其他任务？</strong>:
+<ul>
+<li><strong>更好的解决方法</strong>:
+<ul>
+<li>本文的方法已经展示了生成式 AI 在支持创意构思方面的潜力，但仍有改进空间。例如，可以进一步优化模型以提高生成内容的质量和多样性，或者开发更高效的训练方法以减少计算资源的需求。</li>
+</ul>
+</li>
+<li><strong>其他需要解决的问题</strong>:
+<ul>
+<li>尽管 WHAM 能够生成一致且多样化的游戏玩法序列，但在某些情况下，模型可能仍然无法完全理解游戏的复杂机制，导致生成的内容不够准确或合理。</li>
+<li>模型的持久化能力虽然有所提高，但在某些特定情况下，用户修改的元素可能仍然难以持久化，需要进一步研究如何提高模型的适应性和灵活性。</li>
+</ul>
+</li>
+<li><strong>扩展到其他任务</strong>:
+<ul>
+<li>WHAM 的方法可以扩展到其他需要生成复杂结构和行为的任务，例如电影制作、建筑设计或音乐创作。通过学习相关领域的数据，生成式 AI 模型可以生成符合特定规则和机制的内容，从而支持更广泛的创意实践。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="二-方法和实验">二、方法和实验</h1>
+<h3 id="模型结构和数据">模型结构和数据</h3>
+<figure data-type="image" tabindex="1"><img src="https://yerayl.github.io//post-images/1741241101842.png" alt="" loading="lazy"></figure>
+<p>模型设计与三种能力相关：（1）一致性，通过序列模型准确预测出游戏画面和控制器动作之间的依赖关系，（2）多样性，能够生成保存画面和控制器动作序列条件分布的数据，（3）持续性，预测模型可以将（修改的）图像/控制器动作为条件提供持续性。如图2所示，模型采用Transformer作为基架。通过VQGAN编码器将图像编码为token序列，对于Xbox控制器操作，虽然按钮本身是离散的，但是实际将左右操纵杆的x和y坐标分为11个桶。然后，训练一个只有解码器的Transformer（GPT）来预测交织图像和控制器动作序列中的下一个token。训练完的模型通过自回归采样下个token生成新序列，在生成过程中允许直接修改图片和动作，这是持续性的前提。与游戏工作室Ninja Theory及其游戏《Bleeding Edge》（一款3D、4v4多人战斗视频游戏）合作，渲染制作人类游戏视频。从所有七张Bleeding Edge地图上的大约500000场匿名游戏（连续游戏超过7年）中提取了数据。同时，将完整数据集过滤为仅在Skygarden地图上的1年匿名游戏，称为Skygarden数据集。最大的WHAM模型使用1.6B参数的Transformer，上下文长度为1秒，图片为300X180分辨率被分为540个token。</p>
+<h3 id="模型评估">模型评估</h3>
+<figure data-type="image" tabindex="2"><img src="https://yerayl.github.io//post-images/1741241112364.png" alt="" loading="lazy"></figure>
+<p>通过Fréchet Video Distance (FVD)评估一致性，随着模型大小增加，计算量增加，FVD逐步降低。通过Wasserstein距离来评估多样性，将实际人类行为的边际分布与模型生成的边际分布进行了比较。Wasserstein距离越低，模型的生成就越接近人类玩家在我们的数据集中采取的行动。</p>
+<figure data-type="image" tabindex="3"><img src="https://yerayl.github.io//post-images/1741241121546.png" alt="" loading="lazy"></figure>
+<p>1.6B模型多样性差于894M模型，原因可能是使用了更多的图像token和vocabulary size，如果增加动作损失权重，效果会有提升。图 4b 提供了对多样性的定性评估。以单个真实游戏游戏玩序列为条件，使用 1.6B WHAM 生成三种可能的未来，表明该模型可以生成一系列行为和视觉多样化的游戏玩序列。</p>
+<figure data-type="image" tabindex="4"><img src="https://yerayl.github.io//post-images/1741241129391.png" alt="" loading="lazy"></figure>
+<p>持续性旨在让创意人员控制生成的输出，从而实现迭代调整。该模型应该足够灵活，允许创造性用户修改游戏状态，将这些变化吸收到生成的环境中。通过在合理的位置插入新的不同的元素（游戏对象、玩家、地图元素）来评估持续性。对于每个元素和位置，使用1.6B WHAM生成十张图像，即一个1秒的视频，以一张或五张更改后的图像为条件，手动检查并标记每个元素是否存在于生成的视频中。</p>
+<figure data-type="image" tabindex="5"><img src="https://yerayl.github.io//post-images/1741241135863.png" alt="" loading="lazy"></figure>
+<p>表1显示了被正确注入到游戏中元素所占比例。当对五张编辑过的图像而不是一张进行调节时，WHAM的持久性大大提高，所有元素类型的持久性都达到85%或更高。用户可以选择一组起始帧来“提示”模型，从而实现视觉提示而不是基于语言的提示。然后，WHAM生成了游戏如何发展的潜在游戏序列的许多分支，通过多样化的选项支持发散思维。可以选择任何分支或帧来开始（重新）生成下一帧，包括返回和更改之前的选择，以支持上述参与者提到的迭代融合。为了实现迭代，用户可以修改任何生成的帧，例如通过添加对手角色或提供输入控制器数据，以影响下一个生成的序列。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">
+                <h3 class="post-title">
+                  [ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1745483680487" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zhuan-ti-wen-de-zhi-hui/">[转] 提问的智慧</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zi-wo-xing-wei-qing-xu-diao-kong/">自我行为、情绪调控</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">世界与人类行为模型助力游戏创意构思</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">[ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-less-is-more-on-the-over-globalizing-problem-in-graph-transformers/">[ICML 2024] Less is More: on the Over-Globalizing Problem in Graph Transformers</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge secondary">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge success">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge success">
+          图神经网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge warning">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge secondary">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge success">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge success">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge success">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge warning">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge ">
+          知识图谱
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

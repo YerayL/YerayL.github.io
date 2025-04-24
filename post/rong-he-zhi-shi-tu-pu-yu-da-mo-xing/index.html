@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>大模型和知识图谱结合 | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1745483680487">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>大模型和知识图谱结合</h1>
+            <p class="article-meta">
+              2023-08-22
+              
+                <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge warning">
+                  知识图谱
+                </a>
+              
+                <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge secondary">
+                  大语言模型
+                </a>
+              
+            </p>
+            
+              <img src="https://yerayl.github.io//post-images/rong-he-zhi-shi-tu-pu-yu-da-mo-xing.png" alt="大模型和知识图谱结合">
+            
+            <div class="post-content" v-pre>
+              <p>大语言模型涌现出了通用的能力，但是存在的主要问题：1. <strong>缺乏事实知识</strong>，训练中看了很多事实和知识，但是却经常不能正确回想起来，而且存在幻觉。2. <strong>缺乏可解释性</strong>，概率模型推理<strong>indecisive</strong>，现在应用思维链能提供一部分可解释性，但是同样存在幻觉的问题，使其<strong>难以应用在高风险场景</strong>，例如医疗诊断和法律判决。</p>
+<p>知识图谱是一个解决这些问题的思路。知识图谱包含大量三元组，是<strong>结构化且decisive</strong>的知识表示方式。它能提供<strong>符号推理</strong>能力，具有<strong>可解释性</strong>。领域专家可以构建提供精确可靠的特定领域知识图谱。但是存在的主要问题：1. 构建困难，难以处理其<strong>不完整</strong>和<strong>动态改变</strong>的特点。2. 很多方法<strong>忽视知识图谱中的丰富文本信息</strong>。3. 很多方法只适用特定知识图谱，<strong>通用性不够</strong>。下图分别总结了大模型和知识图谱的优缺点：</p>
+<figure data-type="image" tabindex="1"><img src="https://yerayl.github.io//post-images/1692710974596.png" alt="大模型和知识图谱的优缺点" title="大模型和知识图谱的优缺点" loading="lazy"></figure>
+<p>融合大模型和知识图谱的方法主要可以分为三类：1. <strong>KG-enhanced LLMs</strong>，在预训练时加入知识图谱，帮助大模型学习知识，或者在推理时使用大模型检索知识以及对推理提供分析和解释。2. <strong>LLM-augmented KGs</strong>，最直接的方式是用大模型处理知识图谱中的语料，增强知识图谱表示。也有研究大模型去做实体和关系抽取，来完成图谱构建。还有通过将知识图谱转化为提示，输入给大模型直接做知识推理任务。3. <strong>Synergized LLM + KG</strong>, 在知识表示和推理中相互增强，下图是一个协同大模型和知识图谱的通用框架，主要可以是包含数据层，协同模型，技术以及应用四个层面。</p>
+<figure data-type="image" tabindex="2"><img src="https://yerayl.github.io//post-images/1692712105069.png" alt="协同大模型和知识图谱的通用框架" title="协同大模型和知识图谱的通用框架" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://yerayl.github.io//post-images/1692712734574.png" alt="融合大模型和知识图谱研究的细粒度分类图.png" title="融合大模型和知识图谱研究和细粒度分类图.png" loading="lazy"></figure>
+<p><strong>未来研究方向</strong>：1. 用知识图谱检测大模型幻觉，实现一个更加通用的跨领域的事实核查模型。2. 用知识图谱进行知识编辑，现在的工作还只能编辑简单的基于三元组的知识，并且存在灾难性遗忘和错误编辑的问题。3. 用知识图谱对黑盒大模型进行知识注入，对于闭源的大模型，现在将知识转换为提示输入的方法的问题是不能泛化到新的大模型，还有受限于输入长度。 4. 使用多模态大模型与知识图谱进行对齐。5. 协同大模型和知识图谱双向推理，可以结合很多方法例如多模态学习、图神经网络、持续学习，知识图谱的搜索和文本驱动的推理互相验证。</p>
+<p>[1]<a href="https://arxiv.org/pdf/2306.08302.pdf">Unifying Large Language Models and Knowledge Graphs: A Roadmap</a><br>
+[2]<a href="https://arxiv.org/pdf/2308.06374.pdf">Large Language Models and Knowledge Graphs: Opportunities and Challenges</a></p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/vLLM-blog/">
+                <h3 class="post-title">
+                  vLLM框架原理——PagedAttention
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1745483680487" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zhuan-ti-wen-de-zhi-hui/">[转] 提问的智慧</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zi-wo-xing-wei-qing-xu-diao-kong/">自我行为、情绪调控</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">世界与人类行为模型助力游戏创意构思</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">[ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-less-is-more-on-the-over-globalizing-problem-in-graph-transformers/">[ICML 2024] Less is More: on the Over-Globalizing Problem in Graph Transformers</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge ">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge secondary">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge secondary">
+          图神经网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge secondary">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge success">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge warning">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge success">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge success">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge secondary">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge ">
+          知识图谱
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>论文阅读：[ICLR 2024 Workshop Re-Align] ReAlnet: Achieving More Human Brain-Like Vision via Human Neural Representational Alignment | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1745483680487">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>论文阅读：[ICLR 2024 Workshop Re-Align] ReAlnet: Achieving More Human Brain-Like Vision via Human Neural Representational Alignment</h1>
+            <p class="article-meta">
+              2024-11-19
+              
+                <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge success">
+                  类脑
+                </a>
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p>论文阅读：[ICLR 2024 Workshop Re-Align] ReAlnet: Achieving More Human Brain-Like Vision via Human Neural Representational Alignment</p>
+<p>本文提出了ReAlnet，一个图像到大脑的多层编码对齐框架，不仅优化了模型层，而且模型能够有效地学习和模仿人脑在对象类别和不同神经数据模式中的视觉表征模式。作者发现与人脑表示的对齐提高了模型在物体识别上的的对抗鲁棒性。</p>
+<p>深度卷积神经网络（DCNNs）在物体识别上已经达到了与人类想当的性能水平，然而，与人类脑电图 (EEG) 或功能磁共振成像 (fMRI) 数据相比，DCNN 和人类神经表示之间的对齐仍然深度不足。增强视觉模型和人脑之间的相似性已成为计算机科学家和神经科学家的关键问题。从计算机视觉的角度来看，<strong>受大脑启发的模型通常表现出更高的鲁棒性和泛化性</strong>，这对于实现真正的类似大脑的智能至关重要；同时，从认知神经科学的角度来看，<strong>更紧密地反映大脑表征的模型可以显着提高我们对大脑视觉处理机制的探索</strong>。</p>
+<p>鉴于这些挑战和局限性，当前的关键问题是<strong>如何利用我们对人脑的理解来增强当前的 AI 视觉模型</strong>。传统方法在模<strong>拟人脑视觉信息处理的复杂性方面存在局限性</strong>，即使模型深度和层数增加。这种限制促使探索新方法。研究人员尝试了各种策略，包括改变模型架构（比如增加循环结构、双通路模型、地形约束、反馈路径、改变训练任务（使用自监督学习任务、三维任务模型））。然而，有限的研究集中在<strong>直接使用对复杂视觉信息的神经反应作为反馈，以提高模型对人脑的相似性</strong>。我们的研究侧重于第三种方法——<strong>利用人脑神经活动数据来实现类似大脑的模型</strong>。这种方法代表了<strong>模型和人脑之间的更直接的对齐策略，不受模型结构或预训练方法变化</strong>的影响，这可能标志着朝着与人脑更相似的方向迈出了关键的一步。因此，我们的核心研究问题出现了：<strong>我们能否使用人脑活动来对齐物体识别的人工神经网络并实现更多人类脑视觉模型</strong>？</p>
+<p>最早的尝试是应用人类fMRI信号来修改SVM和CNN的分类边界，以实现更好的类别分类性能。最近的一些研究开始让模型学习神经表示。一种常见的方法是<strong>增加相似性损失，以增加训练过程中模型和神经活动（来自小鼠V1、猴子V1或IT的神经记录）之间的表征相似性</strong>。Safarani等人（2021）的另一种策略是<strong>添加一个基于编码模块的额外任务来预测猴子V1神经活动</strong>。基于相似性的方法和多任务框架都可以实现更像大脑的表示，并提高模型的鲁棒性。然而，这些神经对齐研究有两个关键挑战：（a）<strong>依赖动物而不是人类的神经活动</strong>。这限制了研究结果对人类视觉处理的直接适用性和相关性，并且很难使模型基于低数据质量有效地学习人脑的表征模式。（b） <strong>单脑区</strong>或<strong>单模型层</strong>对齐。一方面，之前的研究只能将CNN中的单个早期或晚期层对齐，和/或将模型与特定的大脑区域V1或IT对齐。另一方面，<strong>目前尚不清楚哪个特定的大脑区应该与模型的哪个特定层对齐，从而导致潜在的错位和不准确</strong>。</p>
+<p>此外，最近一项专注于视频情感识别的研究首次应用了一种基于表征相似性的方法，将CNN与人类fMRI活动对齐。然而，值得注意的是，他们专注于更简单的情感识别任务，可能在更复杂和多样化的物体识别领域存在不足，该领域具有更大的空间和更多的对象类别。因此，我们的工作通过采用一个<strong>超越单纯相似性的额外编码模块</strong>来解决这个问题。该<strong>模块预测人类神经活动，并经过训练以自主提取复杂的视觉特征，为在对象识别中将模型与人类神经表示对齐提供了一种更有效的方法</strong>。</p>
+<p>贡献。为了弥合人工智能视觉和人类视觉之间的差距，我们提出了一种更像人脑的视觉模型ReAlnet，它基于一种新颖有效的基于编码的多层对齐框架，有效地与人脑表示对齐。我们将我们的贡献和新发现总结如下：</p>
+<p>据我们所知，我们是<strong>第一个使用从人脑记录的非侵入性神经数据直接对齐对象识别模型</strong>的人，这为增强基于人脑活动的模型中的类脑表示开辟了新的可能性。</p>
+<p>我们提出了一种新的基于图像到大脑编码的表征对齐框架，<strong>该框架同时优化了网络的多层，有效地提高了模型在不同模态（人类EEG和fMRI）下与人脑表征的相似性</strong>。</p>
+<p>我们的表征对齐框架<strong>允许我们通过与个体的神经数据对齐来获得个性化的视觉模型</strong>。</p>
+<p>与人类神经表示对齐可以提高模型的<strong>对抗鲁棒性</strong>。</p>
+<figure data-type="image" tabindex="1"><img src="https://yerayl.github.io//post-images/1731985195168.png" alt="" loading="lazy"></figure>
+<p>在ImageNet预训练的CORnet-S中添加额外的多层编码模块，输出包含<strong>类别分类结果和生成的EEG信号</strong>。使用训练 EEG 数据，我们的目标是最小化分类损失和生成损失，使 CORnet 不仅可以稳定分类性能，还可以有效地学习人脑特征并转换为 ReAlnet。(B) 使用测试 EEG 数据，我们分别测量 ReAlnet、CORnet-S、ResNet-101 和 CLIP（具有 ResNet101 主干）中<strong>早期和晚期层的模型 RDM 和timepoint-by-timepoint EEG 神经 RDM 之间的表示相似性</strong>（早期层：第一层；后期层：ReAlnet、CORnet 和 ResNet 中的分类层之前的层，以及 CLIP 中的最后一个视觉层），ReAlnet 显示出与人脑的最高相似性。</p>
+<p><em>（注：CORnet-S是一个模仿人脑结构的ANN，下次看看）</em></p>
+<p>接下来介绍这项研究中使用的人类神经数据（用于对齐的EEG数据，以及用于测试模型与人脑之间相似性的EEG和fMRI数据），用于将CORnet表示与人类神经表示对齐以获得ReAlnet的对齐pipeline（包括结构、损失函数以及训练和测试方法），以及用于测量模型与人脑的<strong>表示相似性</strong>和<strong>对抗鲁棒性</strong>的<strong>评估方法</strong>。</p>
+<h4 id="eeg数据">EEG数据</h4>
+<p>EEG数据来自EEG开放数据集THINGS EEG2，包括10名健康人类受试者在快速串行视觉呈现（RSVP）范式中的EEG数据。原始刺激是来自THINGS的500×500像素图像，包括1854种对象概念。在输入给模型之前，将图像图处理成224×224以及归一化成与ImageNet相同。训练集包含66160试次，测试集包含16000试次。使用已经预处理过的覆盖枕叶和顶叶的17个通道（O1, Oz, O2, PO7, PO3, POz, PO4, PO8, P7, P5, P3, P1, Pz, P2）的数据。<strong>以100Hz的采样频率对从刺激开始到发作后200ms的EEG数据进行了重新划分</strong>，因此数据矩阵形状为17通道×20时间点。在模型训练和测试之前，对所有重复的试验进行平均（训练集中每幅图像4次试验，测试集中每张图像80次试验），以获得更稳定的EEG信号。值得注意的是，训练集和测试集在对象类别（概念）方面并不重叠，这意味着在训练集上训练的ReAlnet的性能在测试集上进行评估时，可以有效地揭示模型在不同对象类别上的泛化能力。</p>
+<h4 id="fmri数据">fMRI数据</h4>
+<p>为了证明我们与人类EEG对齐的方法不仅增强了模型与人类EEG的相似性，而且<strong>表明ReAlnet更广泛地有效地学习了人脑的表征模式</strong>，我们还进行了跨模态测试，对来自不同模态（fMRI）、不同受试者集的数据进行了测试，并查看了不同的图像集。fMRI数据来源于Shen et al. (2019)。这个Shen fMRI数据集记录了三名受试者的人脑fMRI信号，同时他们专注于屏幕的中心，查看来自ImageNet的自然图像。我们从Shen fMRI数据集中<strong>选择了测试集</strong>，该数据集包括每个受试者观看50张不同类别图像的fMRI信号，每张图像被观看24次。我们对24次重复试验的fMRI信号进行平均，以获得每次图像观察的更稳定的大脑活动，并从五个感兴趣区域（ROI）提取信号，用于随后比较模型和人类fMRI的相似性：<strong>V1、V2、V3、V4和枕外侧复合体（LOC）</strong>。</p>
+<h4 id="基于图像到大脑编码的对齐pipeline">基于图像到大脑编码的对齐pipeline</h4>
+<p>ReAlnet的基础架构是CORnet-S模型，结合了类似于生物视觉系统中的循环连接，并被证明可以更紧密地模拟大脑的视觉处理。除了循环CNN结构，添加了一个EEG生成模块生成脑电信号构建图像到大脑编码模型。每个视觉层都被连接到一个N×128的层编码器（具有 ReLU 激活的全连接网络），即图中的Enc-V1, Enc-V2, Enc-V4, and Enc-IT。这四个层编码器然后被直接拼接成一个N×512的多层视觉编码器，随后通过一个线性层连接到一个N×340的EEG编码器以生成预测的EEG信号。因此，我们的目标是模型不仅要执行对象分类任务，还要生成人类脑电图信号，当一个人通过一系列编码器通过EEG生成模块查看某个图像时，该信号与真实脑电图信号高度相似。在生成大脑活动的过程中，<strong>ReAlnet 的视觉层有望有效地提取与神经表示更一致的特征</strong>。</p>
+<p><strong>对齐损失</strong>：因此，对齐框架的训练损失由分类损失和生成损失组成：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mi>A</mi></msup><mo>=</mo><msup><mi mathvariant="script">L</mi><mi>C</mi></msup><mo>+</mo><mi>β</mi><mo>⋅</mo><msup><mi mathvariant="script">L</mi><mi>G</mi></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}^A=\mathcal{L}^C+\beta\cdot\mathcal{L}^G
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">A</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9746609999999999em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">C</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">G</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mi>C</mi></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}^C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">C</span></span></span></span></span></span></span></span></span></span></span>表示标准分类交叉熵损失，用于预测ImageNet标签。但是ImageNet的标签不可获取，所以采用从Image预训练的CORNet获得的标签作为真标签。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mi>G</mi></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}^G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">G</span></span></span></span></span></span></span></span></span></span></span>是生成损失，包含MSE损失和对比损失，对比损失是根据生成信号和真实信号之间的差异（负 Spearman 相关系数）计算：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mi>G</mi></msup><mo>=</mo><msup><mi mathvariant="script">L</mi><mrow><mi>M</mi><mi>S</mi><mi>E</mi></mrow></msup><mo>+</mo><msup><mi mathvariant="script">L</mi><mrow><mi>C</mi><mi>o</mi><mi>n</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}^G=\mathcal{L}^{MSE}+\mathcal{L}^{Cont}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">G</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9746609999999999em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">M</span><span class="mord mathdefault mtight" style="margin-right:0.05764em;">S</span><span class="mord mathdefault mtight" style="margin-right:0.05764em;">E</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">C</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mrow><mi>M</mi><mi>S</mi><mi>E</mi></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>(</mo><msub><mi>S</mi><mi>i</mi></msub><mo>−</mo><msub><mover accent="true"><mi>S</mi><mo>^</mo></mover><mi>i</mi></msub><msup><mo>)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}^{MSE}=\frac{1}{N}\sum_{i=1}^{N}(S_i-\hat{S}_i)^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">M</span><span class="mord mathdefault mtight" style="margin-right:0.05764em;">S</span><span class="mord mathdefault mtight" style="margin-right:0.05764em;">E</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.19677em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;">^</span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="script">L</mi><mrow><mi>C</mi><mi>o</mi><mi>n</mi><mi>t</mi></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>[</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo>(</mo><msub><mi>S</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mover accent="true"><mi>S</mi><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo><mo>]</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mi>N</mi><mo>(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>j</mi><mi mathvariant="normal">≠</mi><mi>i</mi></mrow><mi>N</mi></munderover><mo>[</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo>(</mo><msub><mi>S</mi><mi>i</mi></msub><mo>−</mo><msub><mover accent="true"><mi>S</mi><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo><mo>]</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}^{Cont}=\frac1N\sum_{i=1}^{N}[1-\rho(S_i,\hat{S}_i)]-\frac1{N(N-1)}\sum_{i=1}^{N}\sum_{j=1,j\neq i}^{N}[1-\rho(S_i-\hat{S}_i)]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">C</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord">1</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">[</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.19677em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ρ</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;">^</span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:3.266557em;vertical-align:-1.438221em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord">1</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight"><span class="mrel mtight"><span class="mord mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="rlap mtight"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel mtight"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel mtight">=</span></span><span class="mord mathdefault mtight">i</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.438221em;"><span></span></span></span></span></span><span class="mopen">[</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ρ</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.19677em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;">^</span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span></p>
+<p><strong>训练过程</strong>：ReAlnet用10个个体EEG数据训练了对应的10个个性化模型。使用了不同的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>权重（1，10，100，1000），所以总共训了40个。</p>
+<p><strong>表征相似性分析（RSA）</strong>：使用RSA来对模型和人脑之间进行表征比较，首先计算模型和人类神经信号的RDM（表征相异度矩阵），然后计算两个系统RDM之间的Spearman相关系数。为了评估模型与人类EEG之间的相似性，每个RDM的形状为200×200，对应于THINGS EEG2测试集中的200幅图像。<strong>对于EEG RDM，用两种图像条件之间的解码精度作为相异度指标</strong>，为每个时间点和每个受试者构建EEG RDM。对于模型RDM，将200幅图像输入到每个模型中，并从每个视觉层中获得潜在特征。然后通过<strong>使用与任意两幅图像对应的潜在特征的展平向量之间的负Pearson相关系数计算相异度来构建每一层的RDM</strong>。为了比较这些表示，计算Spearman相关系数作为逐层模型RDM和逐时间点神经EEG RDM之间的相似性指标。为了评估模型与人类fMRI之间的相似性，每个RDM的形状为50×50，对应于Shen fMRI数据集测试集中的50幅图像。对于fMRI RDM，计算与任意两幅图像对应的体素激活模式（voxel-wise activation pattern）之间的负Pearson相关系数，作为每个ROI和每个受试者的RDM中的相异指数。对于模型RDM，与上述EEG比较类似，我们从每个模型中获得了每层的50×50 RDM。然后计算Spearman相关系数作为不同ROI的逐层模型RDM和神经fMRI RDM之间的相似性指标，<strong>由于不同模型层和大脑区域之间缺乏明确的对应关系，因此将某个大脑区域的最终相似性指定为跨模型层的最高相似性结果</strong>。</p>
+<p><strong>对抗攻击</strong>：为了执行白盒对抗攻击，使用快速梯度符号攻击（Fast Gradient Sign Attack，FGSA）。我们在ImageNet上评估了前5名的分类准确率，每个模型的epsilon范围为0到0.06。</p>
+<figure data-type="image" tabindex="2"><img src="https://yerayl.github.io//post-images/1732072144328.png" alt="" loading="lazy"></figure>
+<p>ReAlnets与人类EEG和fMRI表现出更高的相似性。（A） 分别表示人类EEG和不同层模型之间的相似性时间过程。底部的黑色方形点表示ReAlnet与CORnet存在显著差异的时间点（p&lt;0.05）。阴影区域反射±SEM。（B） 三名受试者分别在五个不同脑区和模型的fMRI活动之间的表征相似性。星号表明ReAlnet的相似性明显高于CORnet（p&lt;0.05）。（C） ReAlnet与人类EEG和ReAlnet相对于人类fMRI之间相似性改善的相关性。每个圆点表示一个单独的ReAlnet。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/biao-shi-xiang-si-xing-jie-ma-representational-similarity-analysis-rsa/">
+                <h3 class="post-title">
+                  多变量模式分析中的基于分类的解码和表征相似性分析
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1745483680487" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zhuan-ti-wen-de-zhi-hui/">[转] 提问的智慧</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/zi-wo-xing-wei-qing-xu-diao-kong/">自我行为、情绪调控</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">世界与人类行为模型助力游戏创意构思</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">[ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-less-is-more-on-the-over-globalizing-problem-in-graph-transformers/">[ICML 2024] Less is More: on the Over-Globalizing Problem in Graph Transformers</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge warning">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge secondary">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge secondary">
+          图神经网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge secondary">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge warning">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge success">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge ">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge warning">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge success">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge secondary">
+          知识图谱
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
