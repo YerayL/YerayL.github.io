@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>[TMI 2025 ] MM-GTUNets: Unified Multi-Modal Graph Deep Learning for Brain Disorders Prediction | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1778385846755">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>[TMI 2025 ] MM-GTUNets: Unified Multi-Modal Graph Deep Learning for Brain Disorders Prediction</h1>
+            <p class="article-meta">
+              2026-05-09
+              
+                <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge ">
+                  图神经网络
+                </a>
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="mm-gtunets-论文核心总结">MM-GTUNets 论文核心总结</h1>
+<h2 id="1任务介绍">1）任务介绍</h2>
+<p>面向<strong>大规模脑疾病（自闭症ASD、多动症ADHD）预测</strong>的<strong>多模态图深度学习任务</strong>，融合<strong>rs-fMRI影像数据</strong>与<strong>性别、年龄、采集站点等非影像临床数据</strong>，以受试者为节点、受试者间关联为边构建群体图，实现端到端的脑疾病二分类诊断。</p>
+<h2 id="2解决什么问题">2）解决什么问题？</h2>
+<p>现有多模态图深度学习用于脑疾病预测存在三大核心缺陷：</p>
+<ol>
+<li><strong>非影像数据利用不足</strong>：仅用于计算图边权重，未充分挖掘潜在信息，模态差异导致融合低效。</li>
+<li><strong>关键节点特征被忽略</strong>：大规模群体图统一处理，未过滤噪声与关键节点，模型易过平滑。</li>
+<li><strong>跨模态交互深度不足</strong>：仅局限于图内节点-边交互或简单特征拼接，未捕捉复杂模态关联。<br>
+同时，传统方法随图规模扩大，性能显著下降。</li>
+</ol>
+<h2 id="3最朴素的做法">3）最朴素的做法</h2>
+<ol>
+<li>分别提取影像与非影像特征，<strong>直接拼接</strong>后用SVM/MLP等传统模型分类。</li>
+<li>用<strong>固定相似度度量</strong>（如皮尔逊相关）手动构建静态群体图，通过基础GCN完成图学习。</li>
+<li>仅用单模态（影像）数据训练模型，忽略非影像信息的互补作用。</li>
+</ol>
+<h2 id="4本文的做法-解决问题与创新">4）本文的做法、解决问题与创新</h2>
+<h3 id="核心做法">核心做法</h3>
+<p>提出<strong>端到端多模态图Transformer U型网络（MM-GTUNets）</strong>，分三大模块：</p>
+<ol>
+<li><strong>模态奖励表征学习（MRRL）</strong>：用VAE对齐影像与非影像特征；通过<strong>亲和度量奖励系统（AMRS，强化学习Q-learning）</strong> 动态学习非影像特征权重，自适应构建群体图。</li>
+<li><strong>自适应跨模态图学习（ACMGL）</strong>：设计<strong>GTUNet编码器</strong>（融合Graph U-Net与Graph Transformer），通过gPool/gUnpool筛选关键节点、捕捉全局+局部信息；多模态注意力融合模块提取模态特有与共享特征。</li>
+<li><strong>分类与可解释分析</strong>：MLP分类，可视化模态贡献权重。</li>
+</ol>
+<h3 id="解决问题">解决问题</h3>
+<ul>
+<li>用VAE+AMRS解决<strong>非影像数据利用不足、模态鸿沟</strong>问题；</li>
+<li>用GTUNet的池化操作解决<strong>大规模图噪声、关键节点丢失</strong>问题；</li>
+<li>用跨模态注意力融合解决<strong>模态交互浅、特征利用不充分</strong>问题。</li>
+</ul>
+<h3 id="核心创新">核心创新</h3>
+<ol>
+<li><strong>MRRL+AMRS</strong>：首次用强化学习奖励系统动态赋权非影像特征，自适应构建群体图。</li>
+<li><strong>GTUNet</strong>：融合Graph U-Net与Graph Transformer，兼顾局部特征提取与全局依赖建模。</li>
+<li><strong>可解释多模态融合</strong>：量化并可视化各模态贡献权重，提升医疗决策可解释性。</li>
+<li>适配<strong>大规模群体图</strong>，解决传统图模型随规模扩大性能下降的问题。</li>
+</ol>
+<h2 id="5实验发现findings与洞察insights">5）实验发现（Findings）与洞察（Insights）</h2>
+<h3 id="实验发现">实验发现</h3>
+<ol>
+<li><strong>性能最优</strong>：在ABIDE（ASD）、ADHD-200数据集上，ACC、AUC等指标超越所有SOTA方法。</li>
+<li><strong>VAE效果最佳</strong>：VAE作为非影像特征重构器，性能优于AE、MLP。</li>
+<li><strong>GTUNet架构最优</strong>：优于堆叠、残差、级联等编码器结构。</li>
+<li><strong>参数最优区间</strong>：特征嵌入维度<strong>500</strong>、图池化比例<strong>0.8</strong>时性能峰值。</li>
+<li><strong>多模态必要性</strong>：影像+非影像融合效果远优于单模态，影像为主导、非影像为关键补充。</li>
+<li><strong>可扩展性</strong>：图规模扩大，模型性能收敛稳定，适配大规模数据。</li>
+<li><strong>鲁棒性</strong>：对不同影像预处理流程不敏感，泛化性强。</li>
+</ol>
+<h3 id="洞察">洞察</h3>
+<ol>
+<li>非影像数据（性别、年龄、站点）可显著提升预测精度，<strong>年龄</strong>影响最稳定、<strong>性别</strong>贡献度最高。</li>
+<li>群体图方法比脑区图方法更稳定，适合大规模人群预测。</li>
+<li>自适应动态图构建远优于静态手动图，强化学习可有效建模非影像特征的贡献差异。</li>
+<li>医疗AI需<strong>可解释性</strong>，模态权重可视化能为临床诊断提供决策依据。</li>
+</ol>
+<h2 id="6更好方法-待解决问题与任务扩展">6）更好方法、待解决问题与任务扩展</h2>
+<h3 id="更好的解决方法">更好的解决方法</h3>
+<ol>
+<li>用<strong>迁移学习</strong>优化VAE预训练，解决小样本下非影像特征重构难题。</li>
+<li>改进ACMGL模块，采用<strong>动态预测融合</strong>提升跨模态特征质量。</li>
+<li>模型轻量化，降低大规模图的硬件资源消耗。</li>
+</ol>
+<h3 id="其他待解决问题">其他待解决问题</h3>
+<ol>
+<li>仅支持<strong>二分类</strong>，未覆盖多分类脑疾病任务。</li>
+<li>未利用<strong>低质量多模态数据</strong>（缺失、噪声、不平衡）。</li>
+<li>基于<strong>转导学习</strong>，不支持临床实时推理，需适配归纳学习。</li>
+<li>大规模图下算力与显存成本仍较高，需进一步优化。</li>
+</ol>
+<h3 id="可扩展到其他任务">可扩展到其他任务</h3>
+<ol>
+<li><strong>其他脑疾病</strong>：阿尔茨海默症、帕金森症、抑郁症诊断。</li>
+<li><strong>多模态医疗预测</strong>：肿瘤分型、慢性病风险评估、医学影像+电子病历融合诊断。</li>
+<li><strong>通用图学习任务</strong>：社交网络分析、推荐系统、生物分子交互预测等大规模多模态图任务。</li>
+</ol>
+<h1 id="7方法学设计神经科学临床依据-是否假设驱动">7）方法学设计：神经科学/临床依据 + 是否假设驱动</h1>
+<h3 id="1是否有神经科学-临床依据">（1）是否有神经科学 / 临床依据</h3>
+<p><strong>有明确临床与神经科学依据</strong>，整篇方法不是纯算法堆砌，而是紧扣脑疾病多模态诊断的真实临床逻辑：</p>
+<ol>
+<li><strong>多模态融合的临床依据</strong>
+<ul>
+<li>临床诊断自闭症、多动症<strong>必须同时看脑影像 + 年龄、性别、采集站点</strong>等临床信息，单一模态不可靠。</li>
+<li>神经科学：脑功能连接（rs-fMRI）反映病理改变，非影像数据反映人群分层与混杂因素，二者互补。</li>
+</ul>
+</li>
+<li><strong>群体图（population graph）的神经科学依据</strong>
+<ul>
+<li>脑疾病是<strong>群体水平的异常模式</strong>，而非只看单个被试脑区，用“被试为节点、关联为边”符合脑网络组学研究范式。</li>
+</ul>
+</li>
+<li><strong>非影像加权的临床依据</strong>
+<ul>
+<li>临床已知：<strong>性别、年龄、扫描站点</strong>对脑功能连接影响显著，必须量化其贡献，不能平等对待。</li>
+</ul>
+</li>
+<li><strong>图结构降噪的临床依据</strong>
+<ul>
+<li>大样本多中心数据噪声大，必须筛选关键被试节点，符合临床“先质控、再分析”的流程。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2是否由假设驱动hypothesis-driven">（2）是否由假设驱动（Hypothesis-driven）</h3>
+<p><strong>是，强假设驱动</strong>，文章核心假设非常明确：</p>
+<ul>
+<li><strong>核心假设H1</strong>：<strong>动态加权非影像模态</strong>能比静态图更准确建模被试间相似性，提升疾病预测。</li>
+<li><strong>核心假设H2</strong>：<strong>Graph Transformer + Graph U-Net混合结构</strong>能同时捕捉全局依赖与关键局部节点，适配大规模脑疾病数据。</li>
+<li><strong>核心假设H3</strong>：<strong>影像与非影像特征对齐后再融合</strong>，比简单拼接更能挖掘跨模态关联。</li>
+<li><strong>核心假设H4</strong>：各模态对脑疾病预测的<strong>贡献度不同且可量化</strong>，可用于临床解释。</li>
+</ul>
+<p>整篇模型模块（MRRL、ACMGL、GTUNet、AMRS）<strong>全部为验证这些假设而设计</strong>。</p>
+<hr>
+<h1 id="8可解释性实验-统计检验-相关性分析">8）可解释性实验 + 统计检验 / 相关性分析</h1>
+<h3 id="1是否有可解释性实验">（1）是否有可解释性实验</h3>
+<p><strong>有专门的可解释性实验，是本文重要亮点之一</strong>：</p>
+<ol>
+<li><strong>模态贡献权重可视化</strong>
+<ul>
+<li>计算并画出<strong>影像、性别、年龄、采集站点</strong>对最终预测的贡献权重饼图/柱状图。</li>
+<li>结论：<strong>rs-fMRI贡献最大</strong>；非影像中性别贡献更高，年龄最稳定。</li>
+</ul>
+</li>
+<li><strong>t-SNE特征聚类可视化</strong>
+<ul>
+<li>展示多模态融合特征在二维空间<strong>病例/健康被试清晰分离</strong>，证明特征具备疾病区分力。</li>
+</ul>
+</li>
+<li><strong>单模态/组合模态消融可解释</strong>
+<ul>
+<li>依次去掉影像/非影像、只保留年龄/性别/站点，验证每类数据的必要性。</li>
+</ul>
+</li>
+<li><strong>图结构可解释</strong>
+<ul>
+<li>展示AMRS如何学习非影像亲和图，解释哪些临床属性让被试更“相似”。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2是否做了统计检验-相关性分析">（2）是否做了统计检验 / 相关性分析</h3>
+<p><strong>有规范统计检验，但以机器学习评估为主</strong>：</p>
+<ol>
+<li><strong>统计检验</strong>
+<ul>
+<li>10折分层交叉验证（stratified 10-fold CV），保证类别分布一致。</li>
+<li>所有结果报告<strong>均值±标准差</strong>，支持稳定性对比。</li>
+<li>消融实验、参数敏感性分析采用<strong>重复实验+方差趋势</strong>验证显著性。</li>
+</ul>
+</li>
+<li><strong>相关性/关联分析</strong>
+<ul>
+<li>用<strong>皮尔逊相关</strong>构建脑功能连接矩阵（神经科学标准）。</li>
+<li>用<strong>相关距离</strong>计算被试间相似度，构建群体图。</li>
+<li>分析模态贡献度与预测精度的<strong>相关性</strong>：影像权重越高，AUC越高。</li>
+</ul>
+</li>
+<li><strong>未做的内容</strong>
+<ul>
+<li>没有做组间t检验/卡方检验（这是纯临床统计论文的做法）。</li>
+<li>没有报告p值（本文是<strong>IEEE TMI工程类方法学论文</strong>，不强制要求临床统计检验）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="一句话总结">一句话总结</h3>
+<ul>
+<li><strong>方法学</strong>：<strong>临床+神经科学双依据，完全假设驱动</strong>。</li>
+<li><strong>可解释性</strong>：<strong>有模态权重、t-SNE、消融三类可解释实验</strong>。</li>
+<li><strong>统计</strong>：有<strong>交叉验证、均值±标准差、相关性分析</strong>，无传统临床统计假设检验。</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">
+                <h3 class="post-title">
+                  世界与人类行为模型助力游戏创意构思
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1778385846755" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/ijcai-2025-mamba-based-graph-convolutional-networks-tackling-over-smoothing-with-selective-state-space/">[IJCAI 2025] Mamba-Based Graph Convolutional Networks: Tackling Over-smoothing with Selective State Space</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/tmi-2025-mm-gtunets-unified-multi-modal-graph-deep-learning-for-brain-disorders-prediction/">[TMI 2025 ] MM-GTUNets: Unified Multi-Modal Graph Deep Learning for Brain Disorders Prediction</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">世界与人类行为模型助力游戏创意构思</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">[ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-less-is-more-on-the-over-globalizing-problem-in-graph-transformers/">[ICML 2024] Less is More: on the Over-Globalizing Problem in Graph Transformers</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge secondary">
+          图神经网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge secondary">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge secondary">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge secondary">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge secondary">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge warning">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge warning">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge secondary">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge success">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge success">
+          知识图谱
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/b_3Ezp3Ww/" class="badge secondary">
+          Gridea
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

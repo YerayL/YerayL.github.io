@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>[IJCAI 2025] Mamba-Based Graph Convolutional Networks: Tackling Over-smoothing with Selective State Space | Lan&#39;s Notebook</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://yerayl.github.io//favicon.ico?v=1778385846755">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yerayl.github.io//styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://yerayl.github.io/">Lan&#39;s Notebook</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>[IJCAI 2025] Mamba-Based Graph Convolutional Networks: Tackling Over-smoothing with Selective State Space</h1>
+            <p class="article-meta">
+              2026-05-10
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="mbagcn-论文核心要点梳理按你的9个问题">MbaGCN 论文核心要点梳理（按你的9个问题）</h1>
+<h2 id="1任务介绍">1）任务介绍</h2>
+<p>面向<strong>图节点分类</strong>任务，构建可深度堆叠的图卷积网络，在保持深度扩展性的同时，学习高质量的节点表示，适合同质/异质图、引文图、网页图、异构图等多种图结构。</p>
+<h2 id="2解决什么问题">2）解决什么问题？</h2>
+<p>核心解决<strong>GNN深度加深带来的过平滑（over-smoothing）</strong>：</p>
+<ul>
+<li>层数增加→所有节点表示趋同、无法区分→性能急剧下降。</li>
+<li>根源：传统GNN对不同距离邻域信息<strong>无差别聚合</strong>，无法区分信息重要性。</li>
+<li>同时兼顾：长距离依赖捕捉、异质图适应性、深层网络信息流动控制。</li>
+</ul>
+<h2 id="3最朴素的做法是什么">3）最朴素的做法是什么？</h2>
+<ul>
+<li>标准GCN：逐层拉普拉斯平滑，统一聚合邻域信息，无选择性。</li>
+<li>加深网络：直接堆叠GCN层，不做任何选择性过滤或残差/门控。</li>
+<li>结果：浅层有效，深层立刻过平滑、性能崩塌。</li>
+</ul>
+<h2 id="4本文的做法是什么解决了什么问题有什么创新">4）本文的做法是什么？解决了什么问题？有什么创新？</h2>
+<h3 id="做法">做法</h3>
+<p>提出<strong>MbaGCN（Mamba-based Graph Convolutional Network）</strong>，三层交替架构：</p>
+<ol>
+<li><strong>MAL（消息聚合层）</strong>：基础图卷积，聚合邻域特征。</li>
+<li><strong>S³TL（选择性状态空间转换层）</strong>：引入Mamba选择性状态空间，自适应压缩/保留关键信息，丢弃冗余。</li>
+<li><strong>NSPL（节点状态预测层）</strong>：用Gumbel-Softmax动态调整邻接矩阵，控制同阶邻域内信息流向。</li>
+</ol>
+<ul>
+<li>整体：MAL ↔ S³TL交替堆叠，NSPL插在中间做信息门控。</li>
+</ul>
+<h3 id="解决问题">解决问题</h3>
+<ul>
+<li>从机制上缓解<strong>过平滑</strong>：选择性保留高阶邻域有用信息，过滤噪声。</li>
+<li>提升<strong>深度扩展性</strong>：10层仍稳定不降。</li>
+<li>增强<strong>异质图适应性</strong>：对邻节点特征不相似的图效果突出。</li>
+</ul>
+<h3 id="创新点">创新点</h3>
+<ol>
+<li>首次将<strong>Mamba选择性状态空间</strong>深度融入图卷积，而非简单串行/并行拼接。</li>
+<li>设计<strong>交替层结构</strong>，平衡局部细节与全局压缩。</li>
+<li>用<strong>NSPL动态修邻接矩阵</strong>，实现同阶邻域内的信息筛选。</li>
+<li>用<strong>HiPPO-LegS初始化</strong>+<strong>输入相关矩阵生成</strong>，保证状态空间适配图数据。</li>
+</ol>
+<h2 id="5实验发现findings与洞察insights">5）实验发现（findings）与洞察（insights）</h2>
+<h3 id="实验发现">实验发现</h3>
+<ol>
+<li><strong>综合最优</strong>：8个数据集平均排名1.71，6个数据集第一，强于GCN/GAT/GCNII/GPRGNN/GGCN等。</li>
+<li><strong>异质图绝杀</strong>：Wisconsin、Actor上大幅领先，传统GNN在此类图失效。</li>
+<li><strong>深层稳定</strong>：2~10层性能几乎不下降；GCN等2层后暴跌。</li>
+<li><strong>模块有效</strong>：消融证明NSPL、HiPPO-LegS、Input-Related均显著提效。</li>
+<li><strong>代价合理</strong>：时空复杂度随层数线性增长，可接受。</li>
+</ol>
+<h3 id="洞察">洞察</h3>
+<ol>
+<li>过平滑本质是<strong>无差别信息扩散</strong>，Mamba的选择性过滤天然匹配此痛点。</li>
+<li>图上的“距离重要性衰减”和序列长距离依赖<strong>机理相通</strong>。</li>
+<li>动态控制信息流向（NSPL）比固定聚合更适合深层GNN。</li>
+<li>状态空间模型可成为GNN<strong>新一代深度扩展骨干</strong>。</li>
+</ol>
+<h2 id="6数据和代码">6）数据和代码</h2>
+<ul>
+<li>代码：https://github.com/hexin5515/MbaGCN</li>
+<li>数据集：Cora、Citeseer、Pubmed、Computers、Photo、Actor、Wisconsin（标准公开节点分类数据集）。</li>
+</ul>
+<h2 id="7更好方法待解决问题可扩展性">7）更好方法/待解决问题/可扩展性</h2>
+<h3 id="更好的解决思路">更好的解决思路</h3>
+<ul>
+<li>轻量化Mamba变体，降低计算量。</li>
+<li>结合图重连、自适应传播、对比学习进一步抑制过平滑。</li>
+<li>对稠密图专门优化NSPL（本文在稠密图上NSPL效果减弱）。</li>
+</ul>
+<h3 id="待解决问题">待解决问题</h3>
+<ul>
+<li>稠密图上优化与稳定性不足。</li>
+<li>时间/内存随层数线性增长，超大图需优化。</li>
+<li>动态图、多模态图未验证。</li>
+</ul>
+<h3 id="可扩展任务">可扩展任务</h3>
+<ul>
+<li>链接预测、图分类、分子属性预测、推荐系统、生物图、时空图。</li>
+</ul>
+<h2 id="8方法学依据是否神经科学临床是否假设驱动">8）方法学依据：是否神经科学/临床？是否假设驱动？</h2>
+<ul>
+<li><strong>无神经科学/临床依据</strong>：纯深度学习与状态空间模型驱动。</li>
+<li><strong>强假设驱动</strong>：<br>
+假设1：Mamba选择性过滤可解决GNN无差别聚合导致的过平滑。<br>
+假设2：图邻域信息重要性随距离衰减，与序列长距离依赖一致。<br>
+假设3：动态控制信息流向可保持深层节点特征区分度。</li>
+</ul>
+<h2 id="9可解释性统计检验">9）可解释性/统计检验</h2>
+<ul>
+<li><strong>可解释性实验</strong>：无专门可视化/归因分析，但通过<strong>消融实验</strong>解释各模块贡献。</li>
+<li><strong>统计检验</strong>：
+<ul>
+<li>10次随机划分取均值±标准差。</li>
+<li>层深度对比、消融对比均量化精度变化。</li>
+<li>未做显著性检验（t-test/ANOVA），但多数据集重复验证结论稳健。</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://yerayl.github.io/post/tmi-2025-mm-gtunets-unified-multi-modal-graph-deep-learning-for-brain-disorders-prediction/">
+                <h3 class="post-title">
+                  [TMI 2025 ] MM-GTUNets: Unified Multi-Modal Graph Deep Learning for Brain Disorders Prediction
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://yerayl.github.io//images/avatar.png?v=1778385846755" class="no-responsive avatar">
+    <div class="text-muted"></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/ijcai-2025-mamba-based-graph-convolutional-networks-tackling-over-smoothing-with-selective-state-space/">[IJCAI 2025] Mamba-Based Graph Convolutional Networks: Tackling Over-smoothing with Selective State Space</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/tmi-2025-mm-gtunets-unified-multi-modal-graph-deep-learning-for-brain-disorders-prediction/">[TMI 2025 ] MM-GTUNets: Unified Multi-Modal Graph Deep Learning for Brain Disorders Prediction</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/shi-jie-yu-ren-lei-xing-wei-mo-xing-zhu-li-you-xi-chuang-yi-gou-si/">世界与人类行为模型助力游戏创意构思</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icpr-2024-leveraging-persistent-homology-for-differential-diagnosis-of-mild-cognitive-impairment/">[ICPR 2024 ] Leveraging Persistent Homology for Differential Diagnosis of Mild Cognitive Impairment</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-less-is-more-on-the-over-globalizing-problem-in-graph-transformers/">[ICML 2024] Less is More: on the Over-Globalizing Problem in Graph Transformers</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/fu-xi-yi-xia-ge-la-mu-shi-mi-te-zheng-jiao-hua/">Gram-Schmidt Process</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/dan-ci-zhong-de-you-xie-fu-yin-wei-shi-me-xu-yao-shuang-xie-shi-me-shi-hou-gai-shuang-xie-shuang-xie-ru-he-ying-xiang-fa-yin/">单词中的有些辅音为什么需要双写？什么时候该双写？双写如何影响发音？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/cikm-2024-contrasformer-a-brain-network-contrastive-transformer-for-neurodegenerative-condition-identification/">[CIKM 2024] Contrasformer: A Brain Network Contrastive Transformer for Neurodegenerative Condition Identification</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/icml-2024-learning-high-order-relationships-of-brain-regions/">[ICML 2024] Learning High-Order Relationships of Brain Regions</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://yerayl.github.io/post/isbi-2024-brainnetdiff-generative-ai-empowers-brain-network-generation-via-multimodal-diffusion-model/">[ISBI 2024] BrainNetDiff: Generative AI Empowers Brain Network Generation via Multimodal Diffusion Model</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://yerayl.github.io/tag/ScYh_jFIq8/" class="badge secondary">
+          图神经网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/UaQYYkSjoD/" class="badge secondary">
+          脑网络
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/aFf4yKHyI4/" class="badge warning">
+          数据分析方法
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/V81nyARvlV/" class="badge secondary">
+          线性代数
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/MiVHjfdfx5/" class="badge secondary">
+          扩散模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/0DR2nRVm11/" class="badge warning">
+          类脑
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/l9DbS9x0D0/" class="badge secondary">
+          LaTex
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/32LisoKWZc/" class="badge secondary">
+          认知神经科学
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/XQIChG8bY/" class="badge ">
+          大语言模型
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/qSbxg_yyX/" class="badge ">
+          知识图谱
+        </a>
+      
+        <a href="https://yerayl.github.io/tag/b_3Ezp3Ww/" class="badge secondary">
+          Gridea
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    <a href="https://yerayl.github.io/" target="_blank">Home</a> | <a class="rss" href="https://yerayl.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
